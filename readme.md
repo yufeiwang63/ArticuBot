@@ -29,7 +29,7 @@ This is the official repository of the paper:
 [Yufei Wang*](https://yufeiwang63.github.io/), [Ziyu Wang*](https://articubot.github.io/), [Mino Nakura&dagger;](https://articubot.github.io/), [Pratik Bhowal&dagger;](https://articubot.github.io/), [ Chia-Liang Kuo&dagger;](https://sites.google.com/view/chialiangkuo), [Yi-Ting Chen](https://sites.google.com/site/yitingchen0524/home), [Zackory Erickson&Dagger;](https://zackory.com/), [David Held&Dagger;](https://davheld.github.io/)   
 (*&dagger; equal contribution, &Dagger; equal advising)
 
-ArticuBot learns a universal policy for manipulating diverse articulated objects. It first generates a large amount of data in simulation, and then distill them into a visual policy via hierarchical imitation learning. Finally, the learned policy can be zero-shot transferred to the real world. 
+ArticuBot learns a universal policy for manipulating diverse articulated objects. It first generates a large amount of data in simulation, and then distills them into a visual policy via hierarchical imitation learning. Finally, the learned policy can be zero-shot transferred to the real world. 
 <p align="center">
   <img src="data/articubot.gif" alt="Demo GIF" width="500">
 </p>
