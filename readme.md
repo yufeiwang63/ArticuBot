@@ -15,7 +15,7 @@
   <img src="imgs/teaser.png"/>
 </div>  -->
 
-<p align="left">
+<p align="center">
     <a href='https://arxiv.org/abs/2503.03045'>
       <img src='https://img.shields.io/badge/Paper-arXiv-green?style=plastic&logo=arXiv&logoColor=green' alt='Paper arXiv'>
     </a>
@@ -26,7 +26,7 @@
 This is the official repository of the paper:
 
 **[ArticuBot: Learning Universal Articulated Object Manipulation Policy via Large Scale Simulation](https://articubot.github.io/)**, RSS 2025  
-[Yufei Wang*](https://yufeiwang63.github.io/), [Ziyu Wang*](https://zhou-xian.com/), [Mino Nakura&dagger;](https://robogen-ai.github.io/), [Pratik Bhowal&dagger;](https://zswang666.github.io/), [ Chia-Liang Kuo&dagger;](https://wangyian-me.github.io/), [Yi-Ting Chen](https://www.cs.cmu.edu/~katef/), [Zackory Erickson&Dagger;](https://zackory.com/), [David Held&Dagger;](https://davheld.github.io/)   
+[Yufei Wang*](https://yufeiwang63.github.io/), [Ziyu Wang*](https://articubot.github.io/), [Mino Nakura&dagger;](https://articubot.github.io/), [Pratik Bhowal&dagger;](https://articubot.github.io/), [ Chia-Liang Kuo&dagger;](https://sites.google.com/view/chialiangkuo), [Yi-Ting Chen](https://sites.google.com/site/yitingchen0524/home), [Zackory Erickson&Dagger;](https://zackory.com/), [David Held&Dagger;](https://davheld.github.io/)   
 (*&dagger; equal contribution, &Dagger; equal advising)
 
 ArticuBot learns a universal policy for manipulating diverse articulated objects. It first generates a large amount of data in simulation, and then distill them into a visual policy via hierarchical imitation learning. Finally, the learned policy can be zero-shot transferred to the real world. 
@@ -62,7 +62,7 @@ pip install -e .
 pip install fpsample
 ```
 The installtaion might give an error which requires you to install Rust first. Following the prompt in the installtaion error message should be sufficient. 
-If the installation runs into any other issue, check `https://github.com/leonardodalinky/fpsample`.
+If the installation runs into any other issue, check https://github.com/leonardodalinky/fpsample.
 
 - (Optional) In addition to pybullet's default IK solver, we use tracIK as an additional ik solver which might be more accurate and give better IK solutions. If you wish to install tracIK, follow instructions here: https://github.com/mjd3/tracikpy. 
 
@@ -73,13 +73,13 @@ The above should be sufficient for training and evaluating articubot policies.
 
 All datasets we use can be downloaded from this [google drive link](https://drive.google.com/drive/folders/1lbpoo8SqNuLWTjMyvO5RWnBd0XpGq6C4?usp=sharing).
 
-- We use [PartNet-Mobility](https://sapien.ucsd.edu/browse) as our simulation assets. We provide a parsed version in the above googla drive link, named `dataset.zip`. After downloading, unzip it to `data/dataset`.
+- We use [PartNet-Mobility](https://sapien.ucsd.edu/browse) as our simulation assets. We provide a parsed version in the above google drive link, named `dataset.zip`. After downloading, unzip it to `data/dataset`.
 - The high-level policy training dataset is named `dp3_demo.zip`. Unzip it to `data/dp3_demo`. 
 - The high-level policy training dataset is named `dp3_demo_combined_2_step_0.zip`. Unzip it to `data/dp3_demo_combined_2_step_0`.  
 - Some files will also be needed for running evaluation (the simulator init states). 
-They are named `diverse_objects.zip`. Unzip it to `data/diverse_objects` (note to rename it to diverse)
+They are named `diverse_objects.zip`. Unzip it to `data/diverse_objects`.
 
-You can `python scripts/visualization_scripts/check_data.py` to visualize the stored datasets. 
+You can run `python scripts/visualization_scripts/check_data.py` to visualize the stored datasets. 
 
 ## High and low-level policy training
 Assume you have downloaded the training dataset following the above instructions.
@@ -89,7 +89,7 @@ For training the high-level policy:
 source prepare.sh
 bash scripts/weighted-displacement-high-level/train-weighted-displacement.sh
 ```
-Change `num_train_objects` in this script for training with different number of training objects. 
+Change `num_train_objects` in this script for training with different number of objects. 
 The training logs for the low-level policy will be at `3d_diffusion_policy/3D-Diffusion-Policy/3D-Diffusion-Policy/data/`
 
 
@@ -98,7 +98,7 @@ For training the low-levle policy:
 source prepare.sh
 bash scripts/low-level/train_unet_diffusion_low_level.sh
 ```
-Change `num_train_objects` in the script for training with different number of training objects. 
+Change `num_train_objects` in the script for training with different number of objects. 
 The training logs for the high-level policy will be at `weighted_displacement_model/exps/`
 
 
@@ -117,7 +117,7 @@ bash scripts/weighted-displacement-high-level/eval-weighted-displacement-high-le
 ```
 The evaluation results will be saved at `3d_diffusion_policy/3D-Diffusion-Policy/3D-Diffusion-Policy/data/`.
 
-To print the quantitive numbers, you can use `scripts/print_eval_results.py --d your_eval_run_results_dir`
+To print the quantitive numbers, you can run `python scripts/print_eval_results.py --d your_eval_run_results_dir`
 
 ## Demonstration generation
 We are currently in the process of cleaning the data generation code, so stay tuned!
@@ -147,6 +147,7 @@ We thank the authors of the following repositories for open-sourcing their code,
 - Act3D: https://github.com/zhouxian/act3d-chained-diffuser
 - PointNet++: https://github.com/yanx27/Pointnet_Pointnet2_pytorch
 - OMPL: https://ompl.kavrakilab.org/
+- Bullet: https://github.com/bulletphysics/bullet3
 
 ## Citation
 If you find this codebase useful in your research, please consider citing:
