@@ -22,7 +22,7 @@ import pybullet as p
 from manipulation.utils import rotation_transfer_6D_to_matrix_batch, rotation_transfer_matrix_to_6D_batch
 
 def get_zarry_paths(zarr_path):
-    dataset_prefix = os.path.join(os.environ['PROJECT_DIR'], 'data', 'dp3_demo')
+    dataset_prefix = os.path.join(os.environ['PROJECT_DIR'], 'data', 'dp3_demo_combined_2_step_0')
     if zarr_path == 'debug':
         all_zarr_paths = [os.path.join(dataset_prefix, '0628-act3d-obj-47570-gripper-goal-1-displacement-to-object-1-combined-steps-2-filter-zero-close-action-1')]
         
