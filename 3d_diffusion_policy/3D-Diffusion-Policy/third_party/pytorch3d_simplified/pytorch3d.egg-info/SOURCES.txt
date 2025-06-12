@@ -1,0 +1,12 @@
+setup.py
+/media/yufei/42b0d2d4-94e0-45f4-9930-4d8222ae63e51/yufei/projects/RoboGen-sim2real/3d_diffusion_policy/3D-Diffusion-Policy/third_party/pytorch3d_simplified/pytorch3d/csrc/ext.cpp
+/media/yufei/42b0d2d4-94e0-45f4-9930-4d8222ae63e51/yufei/projects/RoboGen-sim2real/3d_diffusion_policy/3D-Diffusion-Policy/third_party/pytorch3d_simplified/pytorch3d/csrc/sample_farthest_points/sample_farthest_points.cu
+/media/yufei/42b0d2d4-94e0-45f4-9930-4d8222ae63e51/yufei/projects/RoboGen-sim2real/3d_diffusion_policy/3D-Diffusion-Policy/third_party/pytorch3d_simplified/pytorch3d/csrc/sample_farthest_points/sample_farthest_points_cpu.cpp
+pytorch3d/__init__.py
+pytorch3d.egg-info/PKG-INFO
+pytorch3d.egg-info/SOURCES.txt
+pytorch3d.egg-info/dependency_links.txt
+pytorch3d.egg-info/requires.txt
+pytorch3d.egg-info/top_level.txt
+pytorch3d/ops/__init__.py
+pytorch3d/ops/sample_farthest_points.py
