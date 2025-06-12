@@ -44,6 +44,7 @@ conda activate articubot
 ```
 cd 3d_diffusion_policy/3D-Diffusion-Policy/3D-Diffusion-Policy
 pip install -e . 
+pip install zarr==2.12.0 wandb ipdb gpustat dm_control omegaconf hydra-core==1.2.0 dill==0.3.5.1 einops==0.4.1 diffusers==0.11.1 numba==0.56.4 moviepy imageio av matplotlib termcolor
 ```
 
 - Install pybullet:
@@ -85,6 +86,8 @@ source prepare.sh
 bash scripts/weighted-displacement-high-level/train-weighted-displacement.sh
 ```
 Change `num_train_objects` in this script for training with different number of training objects. 
+The training logs for the low-level policy will be at `3d_diffusion_policy/3D-Diffusion-Policy/3D-Diffusion-Policy/data/`
+
 
 For training the low-levle policy:
 ```
@@ -92,6 +95,7 @@ source prepare.sh
 bash scripts/low-level/train_unet_diffusion_low_level.sh
 ```
 Change `num_train_objects` in the script for training with different number of training objects. 
+The training logs for the high-level policy will be at `weighted_displacement_model/exps/`
 
 
 ## Evaluate trained policies
