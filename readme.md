@@ -111,6 +111,9 @@ To evaluate a trained high and low-level policy:
 source prepare.sh
 bash scripts/weighted-displacement-high-level/eval-weighted-displacement-high-level.sh
 ```
+The evaluation results will be saved at `3d_diffusion_policy/3D-Diffusion-Policy/3D-Diffusion-Policy/data/`.
+
+To print the quantitive numbers, you can use `scripts/print_eval_results.py --d your_eval_run_results_dir`
 
 ## Demonstration generation
 We are currently in the process of cleaning the data generation code, so stay tuned!
