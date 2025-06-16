@@ -1,0 +1,6 @@
+LICENSE
+setup.py
+diffusion_policy_3d.egg-info/PKG-INFO
+diffusion_policy_3d.egg-info/SOURCES.txt
+diffusion_policy_3d.egg-info/dependency_links.txt
+diffusion_policy_3d.egg-info/top_level.txt

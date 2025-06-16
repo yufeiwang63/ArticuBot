@@ -1,0 +1,190 @@
+defaults:
+- task: robogen_open_door.yaml
+- task/dataset: dataset_200_combine_4_dense_10.yaml
+- task/env_runner/experiment_name: experiment_name.yaml
+- task/env_runner/experiment_folder: experiment_folder.yaml
+- task/env_runner/demo_experiment_path: demo_path.yaml
+use_pretrained_high_level_policy_as_low_level_input: false
+task:
+  name: robogen_open_door
+  task_name: robogen_open_door
+  in_gripper_frame: false
+  image_shape:
+  - 3
+  - 640
+  - 480
+  shape_meta:
+    obs:
+      point_cloud:
+        shape:
+        - 4000
+        - 3
+        type: point_cloud
+      agent_pos:
+        shape:
+        - 10
+        type: low_dim
+    action:
+      shape:
+      - 10
+    goal_gripper_pcd:
+      shape:
+      - 12
+  env_runner:
+    _target_: diffusion_policy_3d.env_runner.robogen_runner.RoboGenRunner
+    max_steps: 35
+    n_obs_steps: ${n_obs_steps}
+    n_action_steps: ${n_action_steps}
+    eval_episodes: 3
+    in_gripper_frame: ${task.in_gripper_frame}
+    gripper_num_points: 0
+    start_after_reaching: 0
+    add_contact: 0
+    use_joint_angle: ''
+    num_point_in_pc: 4500
+    use_segmask: ''
+    only_handle_points: ''
+    num_worker: 40
+    observation_mode: act3d_goal_mlp
+    only_object: true
+name: train_dp3
+task_name: ${task.name}
+shape_meta: ${task.shape_meta}
+time_stamp: ${now:%m%d%H%M}
+exp_name: ${time_stamp}-${task.env_runner.observation_mode}-horizon-${horizon}-num_load_episodes-${task.dataset.num_load_episodes}
+horizon: 8
+n_obs_steps: 2
+n_action_steps: 4
+n_latency_steps: 0
+dataset_obs_steps: ${n_obs_steps}
+keypoint_visible_rate: 1.0
+obs_as_global_cond: true
+policy:
+  _target_: diffusion_policy_3d.policy.dp3.DP3
+  use_point_crop: true
+  condition_type: film
+  use_down_condition: true
+  use_mid_condition: true
+  use_up_condition: true
+  diffusion_step_embed_dim: 128
+  down_dims:
+  - 512
+  - 1024
+  - 2048
+  crop_shape:
+  - 80
+  - 80
+  encoder_output_dim: 60
+  horizon: ${horizon}
+  kernel_size: 5
+  n_action_steps: ${n_action_steps}
+  n_groups: 8
+  n_obs_steps: ${n_obs_steps}
+  noise_scheduler:
+    _target_: diffusers.schedulers.scheduling_ddim.DDIMScheduler
+    num_train_timesteps: 100
+    beta_start: 0.0001
+    beta_end: 0.02
+    beta_schedule: squaredcos_cap_v2
+    clip_sample: true
+    set_alpha_to_one: true
+    steps_offset: 0
+    prediction_type: sample
+  num_inference_steps: 10
+  obs_as_global_cond: true
+  shape_meta: ${shape_meta}
+  use_pc_color: false
+  pointnet_type: pointnet
+  pointcloud_encoder_cfg:
+    in_channels: 3
+    out_channels: ${policy.encoder_output_dim}
+    use_layernorm: true
+    final_norm: layernorm
+    normal_channel: false
+  use_state: true
+  encoder_type: act3d
+  act3d_encoder_cfg:
+    in_channels: 3
+    num_gripper_points: 4
+    goal_mode: cross_attention_to_goal
+    mode: keep_position_feature_in_attention_feature
+    use_mlp: 1
+    use_lightweight_unet: 0
+    self_attention: false
+  prediction_target: action
+ema:
+  _target_: diffusion_policy_3d.model.diffusion.ema_model.EMAModel
+  update_after_step: 0
+  inv_gamma: 1.0
+  power: 0.75
+  min_value: 0.0
+  max_value: 0.9999
+dataloader:
+  batch_size: 300
+  num_workers: 15
+  shuffle: true
+  pin_memory: true
+  persistent_workers: false
+val_dataloader:
+  batch_size: 300
+  num_workers: 15
+  shuffle: false
+  pin_memory: true
+  persistent_workers: false
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 0.0001
+  betas:
+  - 0.95
+  - 0.999
+  eps: 1.0e-08
+  weight_decay: 1.0e-06
+training:
+  use_amp: false
+  device: cuda:0
+  seed: 42
+  debug: false
+  resume: false
+  lr_scheduler: cosine
+  lr_warmup_steps: 500
+  num_epochs: 206
+  gradient_accumulate_every: 1
+  use_ema: true
+  rollout_every: 50
+  checkpoint_every: 5
+  val_every: 30
+  sample_every: 5
+  max_train_steps: null
+  max_val_steps: null
+  tqdm_interval_sec: 1.0
+logging:
+  group: ${exp_name}
+  id: null
+  mode: online
+  name: ${exp_name}_${training.seed}
+  project: dp3
+  resume: true
+  tags:
+  - dp3
+eval_first: 0
+checkpoint:
+  save_ckpt: true
+  topk:
+    monitor_key: test_mean_score
+    mode: max
+    k: 1
+    format_str: epoch={epoch:04d}-test_mean_score={test_mean_score:.3f}.ckpt
+  save_last_ckpt: true
+  save_last_snapshot: true
+load_checkpoint_path: null
+multi_run:
+  run_dir: data/${exp_name}/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+  wandb_name_base: ${exp_name}_${now:%Y.%m.%d-%H.%M.%S}_${name}_${task_name}
+hydra:
+  job:
+    override_dirname: ${name}
+  run:
+    dir: data/${exp_name}/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+  sweep:
+    dir: data/${exp_name}/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+    subdir: ${hydra.job.num}

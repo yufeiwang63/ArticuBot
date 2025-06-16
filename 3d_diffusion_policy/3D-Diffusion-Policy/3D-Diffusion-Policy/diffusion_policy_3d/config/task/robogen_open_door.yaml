@@ -1,0 +1,89 @@
+name: robogen_open_door
+
+task_name: robogen_open_door
+in_gripper_frame: false
+run_eval_rollout: true
+
+image_shape: &image_shape [3, 640, 480]
+shape_meta: &shape_meta
+  # acceptable types: rgb, low_dim
+  obs:
+    # image:
+    #     shape: *image_shape
+    #     type: rgb
+    point_cloud:
+      shape: [4000, 3] # not important, will use the one saved in dataset
+      type: point_cloud
+    agent_pos:
+      shape: [10]
+      # shape: [22]
+      type: low_dim
+  action:
+    shape: [10]
+  goal_gripper_pcd:
+    shape: [12]
+  delta_to_goal_gripper:
+    shape: [12]
+
+env_runner:
+  _target_: diffusion_policy_3d.env_runner.robogen_runner.RoboGenRunner
+  max_steps: 135
+  n_obs_steps: ${n_obs_steps}
+  n_action_steps: ${n_action_steps}
+  eval_episodes: 3
+  in_gripper_frame: ${task.in_gripper_frame}
+  gripper_num_points: 0
+  start_after_reaching: 0
+  add_contact: 0
+  experiment_name: null
+  experiment_folder: null
+  use_joint_angle: false
+  num_point_in_pc: 4500
+  use_segmask: false
+  only_handle_points: false
+  num_worker: 40
+  observation_mode: act3d
+  demo_experiment_path: null
+  only_object: true
+  use_absolute_waypoint: false
+  dense_pcd_for_goal: false 
+  point_cloud_mean_centered: False
+
+dataset:
+  _target_: diffusion_policy_3d.dataset.robogen_dataset.RobogenDataset
+  zarr_path: /media/yufei/42b0d2d4-94e0-45f4-9930-4d8222ae63e51/yufei/projects/RoboGen-sim2real/data/dp3_demo/test_different_init_joint_angle_world
+  horizon: ${horizon}
+  pad_before: ${eval:'${n_obs_steps}-1'}
+  pad_after: ${eval:'${n_action_steps}-1'}
+  seed: 42
+  val_ratio: 0.1
+  train_ratio: 1
+  max_train_episodes: null
+  observation_mode: act3d
+  enumerate: true
+  kept_in_disk: true # keep the dataset in memory / disk
+  load_per_step: true
+  num_load_episodes: 10
+  is_pickle: true
+  dataset_keys: None
+  only_reach_stage: false
+  augmentation_pcd: false
+  augmentation_rot: false
+  augmentation_scale: false
+  scale_scene_by_pcd: false
+  augmentation_goal_gripper_pcd: false
+  use_absolute_waypoint: false
+  object_augmentation_high_level: False
+  mean_x_augmentation_high_level: 0
+  std_x_augmentation_high_level: 2
+  mean_y_augmentation_high_level: 0
+  std_y_augmentation_high_level: 2
+  mean_angle_z_augmentation_high_level: 0 
+  std_rot_z_augmentation_high_level: 10
+  prob_x: 0.3
+  prob_y: 0.3
+  prob_rot_z: 0.3
+  prediction_target: 'action'
+  use_repr_10d: false
+  pos_ori_imp: false
+  dp3: false
