@@ -121,7 +121,7 @@ To print the quantitive numbers, you can run `python scripts/print_eval_results.
 By using the provided pretrained policy ckpts, you are expected to get a performance around 0.68 (averaged over 10 test objects, each with 25 test trials. Each trial has different object pose/robot initial joint angle). 
 
 ## Demonstration generation
-We are currently in the process of cleaning the data generation code, so stay tuned!
+python manipulation/gen_demo.py --root_dir data/diverse_objects_all/ --extract_name 41510 --exp_name test_gen_demo --num_to_generate 1 --max_try_times 10
 
 ### Open Motion Planning Library (OMPL) for demonstration generation
 OMPL is only needed for generating the training demonstrations. It is not needed for training the policy.

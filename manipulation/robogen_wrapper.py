@@ -21,10 +21,7 @@ from scipy.interpolate import RectBivariateSpline
 from scipy.spatial.distance import cdist
 from scipy.spatial.transform import Rotation as R
 from sklearn.neighbors import NearestNeighbors
-from manipulation.utils import get_pc, get_pc_in_camera_frame, rotation_transfer_6D_to_matrix, rotation_transfer_matrix_to_6D, add_sphere, get_pixel_location, get_matrix_from_pos_rot
-from manipulation.gpt_reward_api import get_handle_pos, get_link_pc
-from manipulation.gpt_primitive_api import get_pc_num_within_gripper
-
+from manipulation.utils import get_pc, rotation_transfer_6D_to_matrix, rotation_transfer_matrix_to_6D, get_pixel_location, get_handle_pos, get_link_pc
 class RobogenPointCloudWrapper:
     def __init__(self, 
                  env, 

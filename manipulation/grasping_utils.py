@@ -31,7 +31,30 @@ def rotation_matrix_y(theta):
         [-np.sin(theta), 0, np.cos(theta)]
     ]))
     
-    
+
+def align_gripper_x_and_z(x, z, randomize=False, flip=False):
+    G_z = z  # gripper z axis aligns with normal
+    G_x = x  # gripper x axis aligns with x
+    if flip:
+        G_x = -G_x
+    if randomize:
+        succeed = False
+        while not succeed:
+            G_x = np.random.uniform(-1, 1, 3)
+            G_x /= np.linalg.norm(G_x)
+            deg1 = np.rad2deg(np.arccos(np.dot(G_x, x)))
+            deg2 = np.rad2deg(np.arccos(np.dot(G_x, -x)))
+            if deg1 < 30 or deg2 < 30:
+                succeed = True
+                break
+    # G_x = G_x - np.dot(G_x, G_z) * G_z  # make G_x orthogonal to G_z
+    G_z = G_z - np.dot(G_z, G_x) * G_x  # make G_z orthogonal to G_x
+    G_y = np.cross(G_z, G_x)  # make G_y orthogonal to G_z and G_x
+    R_WG = R.from_matrix(np.vstack((G_x, G_y, G_z)).T)  # create rotation matrix from G_x, G_y, G_z
+    return R_WG
+
+
+#USED
 def align_gripper_z_with_normal(normal, horizontal=False, randomize=False, flip=False):
     n_WS = normal
     Gz = n_WS  # gripper z axis aligns with normal 

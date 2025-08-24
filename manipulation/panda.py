@@ -12,6 +12,9 @@ class Panda(Robot):
                 
         super(Panda, self).__init__(controllable_joints, right_arm_joint_indices, right_end_effector, right_gripper_indices)
         self.right_hand = right_hand
+        
+        self.finger_fully_open_joint_angle = 0.04
+        self.finger_fully_close_joint_angle = 0.0
 
     def init(self, directory, id, np_random, fixed_base=True, debug=False, ik_limit=True):
         if ik_limit:

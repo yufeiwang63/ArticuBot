@@ -69,13 +69,11 @@ class PbOMPLRobot():
             low = joint_info[8] # low bounds
             high = joint_info[9] # high bounds
 
-            # TODO: the indicies may be different for a mobile manipulator
-            if not self.env.mobile:
-                if i in self.joint_idx:
-                    if i != 9 and i != 10:
-                        delta = 0.05 * (high - low)
-                        low += delta
-                        high -= delta
+            if i in self.joint_idx:
+                if i != 9 and i != 10:
+                    delta = 0.05 * (high - low)
+                    low += delta
+                    high -= delta
 
             if low < high:
                 self.joint_bounds.append([low, high])
