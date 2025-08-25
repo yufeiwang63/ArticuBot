@@ -155,7 +155,7 @@ Inside that folder:
 
 Then, render and extract the point cloud from the generated demonstration states:
 ```
-python manipulation/extract_pcd_from_states.py     --folder_name data/diverse_objects_all     --save_path "data/dp3_demo/test_gen_demo/41510"    --exp_name "test_gen_demo"     --pointcloud_num 4500     --num_experiment 1000     --observation_mode act3d_goal_displacement_gripper_to_object     --parallel 0     --extract_name 41510
+python manipulation/extract_pcd_from_states.py     --folder_name data/diverse_objects_all     --save_path "data/dp3_demo/test_gen_demo/41510"    --exp_name "test_gen_demo"   --extract_name 41510
 ```
 This will generate the demonstration that can be used for training. 
 The demonstration will be saved at `data/dp3_demo/tet_gen_demo/41510`. Each demonstrate states generated above (specified by a time string) will have its own folder, which contains a list of pickle files (of the demonstration trajectory) that contain the needed data for training both the high-level and the low-level policy (You will see that they are stored the same way as the provided training dataset above). 
