@@ -139,7 +139,8 @@ echo "path_to_your_ompl_installation_from_last_step/OMPL/ompl-1.5.2/py-bindings"
 remember to change the path to be your ompl installed path and conda environment path.
 
 ### Generating Demos
-First, run the following command to generate the simulator states of a demonstration. It will try to generation 1 demonstration for the storagefurniture with id 41510, with a maximum number of 10 attempts.
+First, download some needed configs for data generation from this [google drive link](https://drive.google.com/file/d/13q2THhf7AH6rVZz1oDToblbQGoZF9nsr/view?usp=drive_link). Unzip it to data/, and rename it to be `diverse_objects_all` so the file structure is `data/diverse_objects_all`.   
+Then, run the following command to generate the simulator states of a demonstration. It will try to generation 1 demonstration for the storagefurniture with id 41510, with a maximum number of 10 attempts.
 ```
 python manipulation/gen_demo.py --root_dir data/diverse_objects_all/ --extract_name 41510 --exp_name test_gen_demo --num_to_generate 1 --max_try_times 10
 ```
