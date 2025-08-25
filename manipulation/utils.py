@@ -1582,7 +1582,7 @@ def render_to_get_link_com(simulator, object_name, urdf_link_name):
 
     ### add a safety check here in case the rendering fails
     bounding_box = get_bounding_box_link(simulator, object_name, urdf_link_name)
-    if not in_bbox(simulator, link_com, bounding_box[0], bounding_box[1]):
+    if not in_bbox(link_com, bounding_box[0], bounding_box[1]):
         link_com = (bounding_box[0] + bounding_box[1]) / 2
 
     return link_com, all_pc

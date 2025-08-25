@@ -121,9 +121,7 @@ To print the quantitive numbers, you can run `python scripts/print_eval_results.
 By using the provided pretrained policy ckpts, you are expected to get a performance around 0.68 (averaged over 10 test objects, each with 25 test trials. Each trial has different object pose/robot initial joint angle). 
 
 ## Demonstration generation
-python manipulation/gen_demo.py --root_dir data/diverse_objects_all/ --extract_name 41510 --exp_name test_gen_demo --num_to_generate 1 --max_try_times 10
-
-### Open Motion Planning Library (OMPL) for demonstration generation
+### Installing Open Motion Planning Library (OMPL) for demonstration generation
 OMPL is only needed for generating the training demonstrations. It is not needed for training the policy.
 
 If your system is ubuntu 20.04 or higher, use the prebuilt wheels for python 3.9: https://drive.google.com/file/d/1dGiq8_CqIPFWqjqyXJzT7yp2z0PVLEdX/view?usp=sharing (See https://github.com/ompl/ompl/releases/tag/prerelease for more wheels for different python versions). Run `pip install your_downloaded_ompl_wheel` to install the library (do this in the articubot conda env). 
@@ -139,6 +137,35 @@ Then, export the installation to the conda environment to be used with ArticuBot
 echo "path_to_your_ompl_installation_from_last_step/OMPL/ompl-1.5.2/py-bindings" >> ~/miniconda3/envs/articubot/lib/python3.9/site-packages/ompl.pth
 ```
 remember to change the path to be your ompl installed path and conda environment path.
+
+### Generating Demos
+First, run the following command to generate the simulator states of a demonstration. It will try to generation 1 demonstration for the storagefurniture with id 41510, with a maximum number of 10 attempts.
+```
+python manipulation/gen_demo.py --root_dir data/diverse_objects_all/ --extract_name 41510 --exp_name test_gen_demo --num_to_generate 1 --max_try_times 10
+```
+The generated demonstrations will be stored at `data/diverse_objects_all/41510/experiment/test_gen_demo/{time_string}`.
+Inside that folder:
+- states: store all pybullet states in the demonstration; these states can be later loaded into the simulator for reproducing the demonstration trajectory and to render point clouds or images. 
+- all.gif: a gif showing the generated demonstrations
+- best_score.txt: we compute a grasping score for the demo, which is the number of handle points the robot has grasped. 
+- opened_angle.txt: stores the final joint angle, the initial joint angle, and the maximal joint angle of the door
+- stage_lengths.json: store the number of timesteps for each stage in the demo (reaching, grasping, opening)
+- task_config.yaml: a config of this demonstration generation experiment, can be used to reproduce the demonstration. 
+
+
+Then, render and extract the point cloud from the generated demonstration states:
+```
+python manipulation/extract_pcd_from_states.py     --folder_name data/diverse_objects_all     --save_path "data/dp3_demo/test_gen_demo/41510"    --exp_name "test_gen_demo"     --pointcloud_num 4500     --num_experiment 1000     --observation_mode act3d_goal_displacement_gripper_to_object     --parallel 0     --extract_name 41510
+```
+This will generate the demonstration that can be used for training. 
+The demonstration will be saved at `data/dp3_demo/tet_gen_demo/41510`. Each demonstrate states generated above (specified by a time string) will have its own folder, which contains a list of pickle files (of the demonstration trajectory) that contain the needed data for training both the high-level and the low-level policy (You will see that they are stored the same way as the provided training dataset above). 
+The generated pickle file stores the following keys:
+- 'state': robot prioperception state, including the position, orientation (6d) of the end-effector and the opened width of the finger.  
+- 'point_cloud': point cloud of the object (Nx3 array, where N=4500 by default).
+- 'action': robot action, which is 10d, 3d delta translation, 6d delta orientation of the end-effector, and the delta distance change of the finger width.
+- 'gripper_pcd': a 4x3 array that stores the current end-effector points.
+- 'goal_gripper_pcd': a 4x3 array that stores the goal end-effector points.
+- 'displacement_gripper_to_object': the 3d vector that points from the end-effector point to the closest object point. 
 
 
 ## Acknowledgement

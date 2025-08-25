@@ -69,7 +69,7 @@ def create_config_variant(config_path):
 
     for config_dict in new_config:
         if 'size' in config_dict:
-            size_ratio = np.random.uniform(0.7, 1.0) # make our refrigerator smaller    
+            size_ratio = np.random.uniform(0.7, 0.9) ### default is 1.5
             config_dict['size'] = size_ratio * config_dict['size']
             config_dict['is_crop_size'] = True
 
